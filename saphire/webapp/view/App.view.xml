@@ -1,0 +1,19 @@
+<mvc:View controllerName="saphire.controller.App" displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<App id="app">
+		<mvc:View controllerName="saphire.controller.App" displayBlock="true"
+			xmlns="sap.m"
+			xmlns:f="sap.f"
+			xmlns:mvc="sap.ui.core.mvc">
+
+			<f:FlexibleColumnLayout id="flexibleColumnLayout" layout="{appLayout>/currentLayout}" backgroundDesign="Solid">
+			
+			
+			</f:FlexibleColumnLayout>
+
+		</mvc:View>
+	</App>
+
+</mvc:View>

@@ -1,0 +1,70 @@
+{
+  "name": "saphire",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js-community/odata-v2-adapter": "^1.15.2",
+    "@cap-js/hana": "^2",
+    "@langchain/community": "^0.3.48",
+    "@langchain/core": "^0.3.62",
+    "@langchain/langgraph": "^0.3.6",
+    "@langchain/langgraph-supervisor": "^0.0.14",
+    "@langchain/openai": "^0.5.18",
+    "@langchain/textsplitters": "^0.1.0",
+    "@sap-ai-sdk/langchain": "^1.15.0",
+    "@sap/cds": "^9",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
+    "axios": "^1.10.0",
+    "body-parser": "^2.2.0",
+    "cap-llm-plugin": "^1.5.0",
+    "compression": "^1.7.4",
+    "express": "^4",
+    "i": "^0.3.7",
+    "install": "^0.13.0",
+    "langchain": "^0.3.29",
+    "mammoth": "^1.9.1",
+    "npm": "^11.4.2",
+    "openai": "^4.62.1",
+    "pdf-parse": "^1.1.1",
+    "zod": "^3.25.74"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.11.0",
+    "@cap-js/sqlite": "^2"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "start:dev": "cds watch",
+    "deploy:local": "cds deploy --to sqlite:saphire.db"
+  },
+  "cds": {
+    "requires": {
+      "app": {
+        "openai": {
+          "apiKey": "${gen-swKCZOjw5WKNIMhlMxHLSe3PWm1pEFcrtRFXxMOtZYR5kDic}",
+          "completionAttributes": {
+            "max_tokens": 1200,
+            "temperature": 0.8,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0.6
+          }
+        }
+      },
+      "db": {
+        "kind": "hana",
+        "pool": {
+          "max": 20,
+          "min": 1,
+          "acquireTimeoutMillis": 30000
+        }
+      }
+    }
+  }
+}

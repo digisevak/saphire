@@ -1,0 +1,74 @@
+<mvc:View xmlns:core="sap.ui.core" controllerName="saphire.controller.Chat" displayBlock="true"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:webc="sap.ui.webc.main"
+	xmlns:f="sap.f"
+	xmlns:custom="saphire.control" core:require="{
+        LayoutManager: 'saphire/util/LayoutManager',
+		ChatFormatter: 'saphire/formatter/ChatFormatter'
+	}"
+	xmlns:layout="sap.ui.layout" height="100%">
+
+	<webc:Toast id="steamingEnabledToast" duration="2000" placement="TopCenter"></webc:Toast>
+
+	<f:DynamicPage id="chatPage" class="sapUiContentPadding chatPage" showFooter="true">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{topic}"/>
+				</f:heading>
+				<f:actions>
+					<Label text="Enable streaming:"></Label>
+					<Switch state="{streamingEnabled}" change="onStreamingEnabledChange"></Switch>
+					<ToolbarSeparator ></ToolbarSeparator>
+					<Button icon="sap-icon://delete" press="onDeleteChat" type="Transparent"/>
+				</f:actions>
+				<f:navigationActions>
+
+					<!-- Use the LayoutModel directly -->
+					<Button icon="sap-icon://exit-full-screen" press="getModel('appLayout').exitFullScreen()" visible="{= ${appLayout>/isFullScreen} }" type="Transparent" />
+
+					<!-- Use the LayoutManager -->
+					<Button icon="sap-icon://full-screen" press="LayoutManager.getInstance().setMidColumnFullScreen()" visible="{= !${appLayout>/isFullScreen} }" type="Transparent" />
+				</f:navigationActions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Header -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="false">
+				<layout:HorizontalLayout>
+					<layout:VerticalLayout class="sapUiMediumMarginEnd">
+						<ObjectAttribute title="Model" text="{model}"/>
+					</layout:VerticalLayout>
+					<layout:VerticalLayout class="sapUiMediumMarginEnd">
+						<ObjectAttribute title="Agent" text="{= ${personality/name} || 'none' }">
+							<customData>
+								<core:CustomData value="{personality_ID}"></core:CustomData>
+							</customData>
+						</ObjectAttribute>
+					</layout:VerticalLayout>
+				</layout:HorizontalLayout>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<VBox class="sapUiMediumMarginBottom">
+				<List id="messageList" showNoData="false" showSeparators="Inner" items="{ path: 'messages', sorter: { path: 'createdAt', descending: false }}">
+					<custom:ChatMessageListItem message="{text}" sender="{sender}" date="{createdAt}">
+						<custom:avatar>
+							<Avatar displaySize="S" src="{ path: 'sender', formatter: 'ChatFormatter.senderIcon' }" displayShape="Square" backgroundColor="Transparent" />
+						</custom:avatar>
+					</custom:ChatMessageListItem>
+				</List>
+				<Text id="listEndMarker" text="" visible="true" />
+			</VBox>
+		</f:content>
+		<!-- DynamicPage Footer -->
+		<f:footer>
+			<OverflowToolbar>
+				<FeedInput id="newMessageInput" post="onPostMessage" showIcon="false" />
+			</OverflowToolbar>
+		</f:footer>
+	</f:DynamicPage>
+
+</mvc:View>

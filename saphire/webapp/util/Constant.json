@@ -1,0 +1,55 @@
+{
+    "user": null,
+    "cvInformation": {
+        "candidateId": "",
+        "documentId": "",
+        "processingTime": "",
+        
+        "header": {
+            "fullName": "",
+            "currentRole": "",
+            "location": "",
+            "profileImage": null,
+            "completenessScore": 0,
+            "confidence": ""
+        },
+        
+        "personalInfo": {
+            "firstName": "",
+            "lastName": "",
+            "email": "",
+            "phone": "",
+            "location": "",
+            "summary": "",
+            "linkedIn": "",
+            "portfolio": "",
+            "github": ""
+        },
+        
+        "experience": [],
+        "education": [],
+        
+        "skills": {
+            "technical": [],
+            "programming": [],
+            "frameworks": [],
+            "tools": [],
+            "languages": [],
+            "soft": []
+        },
+        
+        "projects": [],
+        "certifications": [],
+        "languages": [],
+        "enhancement": {},
+        
+        "metrics": {
+            "completenessScore": 0,
+            "validation": {},
+            "textLength": 0,
+            "processingTime": ""
+        },
+        
+        "rawParsedData": null
+    }
+}

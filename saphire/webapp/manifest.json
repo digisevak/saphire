@@ -1,0 +1,243 @@
+{
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "saphire",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"ach": "set-ach",
+		"crossNavigation": {
+			"inbounds": {
+				"Capui5gptchat-display": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "Capui5gptchat",
+					"action": "display",
+					"icon": "sap-icon://message-popup"
+				},
+				"CVVerification-display": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "CVVerification",
+					"action": "display",
+					"icon": "sap-icon://upload"
+				},
+				"CandidateInformation-display": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "CandidateInformation",
+					"action": "display",
+					"icon": "sap-icon://person-placeholder"
+				}
+			}
+		},
+		"dataSources": {
+			"default": {
+				"uri": "odata/v4/chat/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "4.0",
+					"localUri": "localService/metadata.xml"
+				}
+			},
+			"resumeService": {
+				"uri": "odata/v2/resume/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "localService/resumeMetadata.xml"
+				}
+			},
+			"localData": {
+				"uri": "util/Constant.json",
+				"type": "JSON"
+			}
+		},
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": false,
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				},
+				{
+					"uri": "css/CVVerification.css"
+				}
+			]
+		},
+		"rootView": {
+			"viewName": "saphire.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.108.6",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.ui.layout": {},
+				"sap.ui.unified": {},
+				"sap.m": {},
+				"sap.f": {},
+				"sap.uxap": {}
+			}
+		},
+		"handleValidation": true,
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"": {
+				"type": "sap.ui.model.odata.v4.ODataModel",
+				"settings": {
+					"synchronizationMode": "None",
+					"groupId": "$auto",
+					"groupProperties": {
+						"update": {
+							"submit": "API"
+						},
+						"response": {
+							"submit": "API"
+						}
+					},
+					"autoExpandSelect": true,
+					"operationMode": "Server",
+					"updateGroupId": "update"
+				},
+				"dataSource": "default",
+				"preload": false
+			},
+			"resumeModel": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultBindingMode": "TwoWay",
+					"defaultCountMode": "Request",
+					"refreshAfterChange": false,
+					"metadataUrlParams": {
+						"sap-value-list": "none"
+					}
+				},
+				"dataSource": "resumeService",
+				"preload": false
+			},
+			"localModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"dataSource": "localData"
+			},
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "saphire.i18n.i18n"
+				}
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.f.routing.Router",
+				"viewType": "XML",
+				"viewPath": "saphire.view",
+				"controlId": "flexibleColumnLayout",
+				"transition": "slide",
+				"bypassed": {
+					"target": "notFound"
+				},
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "home",
+					"target": [
+						"chats",
+						"noChat"
+					],
+					"layout": "TwoColumnsMidExpanded"
+				},
+				{
+					"pattern": "chat/{chat}",
+					"name": "chat",
+					"target": [
+						"chats",
+						"chat"
+					],
+					"layout": "TwoColumnsMidExpanded"
+				},
+				{
+					"pattern": "cvverification",
+					"name": "cvverification",
+					"target": "cvverification",
+					"layout": "OneColumn"
+				},
+				{
+					"pattern": "cvverification/{candidateId}",
+					"name": "cvverificationWithCandidate",
+					"target": "cvverification",
+					"layout": "OneColumn"
+				},
+				{
+					"pattern": "candidate/{candidateId}",
+					"name": "candidateInformation",
+					"target": "candidateInformation",
+					"layout": "OneColumn"
+				}
+			],
+			"targets": {
+				"chats": {
+					"viewId": "chats",
+					"viewName": "Chats",
+					"controlAggregation": "beginColumnPages"
+				},
+				"chat": {
+					"viewId": "chat",
+					"viewName": "Chat",
+					"controlAggregation": "midColumnPages"
+				},
+				"noChat": {
+					"viewId": "nochat",
+					"viewName": "NoChat",
+					"controlAggregation": "midColumnPages"
+				},
+				"cvverification": {
+					"viewId": "cvverification",
+					"viewName": "CVVerification",
+					"controlAggregation": "beginColumnPages"
+				},
+				"candidateInformation": {
+					"viewId": "candidateInformationPage",
+					"viewName": "CandidateInformationPage",
+					"controlAggregation": "beginColumnPages"
+				},
+				"notFound": {
+					"viewId": "notfound",
+					"viewName": "NotFound",
+					"controlAggregation": "beginColumnPages"
+				}
+			}
+		}
+	},
+	"sap.cloud": {
+		"public": true,
+		"service": "saphire.service"
+	}
+}

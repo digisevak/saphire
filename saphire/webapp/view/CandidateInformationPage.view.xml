@@ -1,0 +1,542 @@
+<mvc:View controllerName="saphire.controller.CandidateInformationPage" 
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:uxap="sap.uxap"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified">
+
+    <uxap:ObjectPageLayout id="candidateObjectPage" 
+        showTitleInHeaderContent="true"
+        upperCaseAnchorBar="false">
+        
+        <!-- Header -->
+        <uxap:headerTitle>
+            <uxap:ObjectPageDynamicHeaderTitle>
+                <uxap:expandedHeading>
+                    <VBox>
+                        <Title text="{localModel>/cvInformation/header/fullName}" level="H1"/>
+                        <Text text="{localModel>/cvInformation/header/currentRole}" class="sapUiMediumMarginTop"/>
+                        <Text text="{localModel>/cvInformation/header/location}" class="sapUiSmallMarginTop"/>
+                    </VBox>
+                </uxap:expandedHeading>
+                
+                <uxap:snappedHeading>
+                    <Title text="{localModel>/cvInformation/header/fullName}" level="H2"/>
+                </uxap:snappedHeading>
+                
+                <uxap:actions>
+                    <Button text="{= ${localModel>/editMode} ? 'Save Changes' : 'Edit Profile'}" 
+                            type="{= ${localModel>/editMode} ? 'Emphasized' : 'Default'}"
+                            icon="{= ${localModel>/editMode} ? 'sap-icon://save' : 'sap-icon://edit'}" 
+                            press="onToggleEditMode"/>
+                    <Button text="Download CV" icon="sap-icon://download" press="onDownloadPress"/>
+                    <Button text="Submit Application" 
+                            type="Emphasized" 
+                            icon="sap-icon://complete" 
+                            press="onSubmitApplication"
+                            visible="{= !${localModel>/editMode} &amp;&amp; ${localModel>/cvInformation/header/completenessScore} >= 70}"/>
+                    <Button text="Back" icon="sap-icon://nav-back" press="onNavBack"/>
+                </uxap:actions>
+            </uxap:ObjectPageDynamicHeaderTitle>
+        </uxap:headerTitle>
+
+        <!-- Header Content -->
+        <uxap:headerContent>
+            <layout:Grid defaultSpan="L4 M6 S12" hSpacing="2">
+                <!-- Contact Information -->
+                <VBox class="sapUiMediumMarginEnd">
+                    <Label text="Contact Information" class="sapUiSmallMarginBottom"/>
+                    
+                    <!-- Profile Image Upload -->
+                    <VBox class="sapUiTinyMarginBottom" visible="{localModel>/editMode}">
+                        <Label text="Profile Picture" class="sapUiTinyMarginBottom"/>
+                        <u:FileUploader id="profileImageUploader" 
+                                       width="200px" 
+                                       placeholder="Upload profile picture"
+                                       fileType="jpg,jpeg,png"
+                                       maximumFileSize="5"
+                                       change="onProfileImageChange"/>
+                    </VBox>
+                    
+                    <!-- Email -->
+                    <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                        <core:Icon src="sap-icon://email" size="1rem" class="sapUiTinyMarginEnd"/>
+                        <Input value="{localModel>/cvInformation/personalInfo/email}" 
+                               editable="{localModel>/editMode}"
+                               visible="{localModel>/editMode}"/>
+                        <Link text="{localModel>/cvInformation/personalInfo/email}" 
+                              href="mailto:{localModel>/cvInformation/personalInfo/email}"
+                              visible="{= !${localModel>/editMode}}"/>
+                    </HBox>
+                    
+                    <!-- Phone -->
+                    <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                        <core:Icon src="sap-icon://phone" size="1rem" class="sapUiTinyMarginEnd"/>
+                        <Input value="{localModel>/cvInformation/personalInfo/phone}" 
+                               editable="{localModel>/editMode}"
+                               visible="{localModel>/editMode}"/>
+                        <Text text="{localModel>/cvInformation/personalInfo/phone}"
+                              visible="{= !${localModel>/editMode}}"/>
+                    </HBox>
+                    
+                    <!-- LinkedIn -->
+                    <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                        <core:Icon src="sap-icon://linkedin" size="1rem" class="sapUiTinyMarginEnd"/>
+                        <Input value="{localModel>/cvInformation/personalInfo/linkedIn}" 
+                               editable="{localModel>/editMode}"
+                               visible="{localModel>/editMode}"/>
+                        <Link text="LinkedIn Profile" 
+                              href="https://{localModel>/cvInformation/personalInfo/linkedIn}"
+                              visible="{= !${localModel>/editMode}}"/>
+                    </HBox>
+                    
+                    <!-- GitHub -->
+                    <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                        <core:Icon src="sap-icon://share" size="1rem" class="sapUiTinyMarginEnd"/>
+                        <Input value="{localModel>/cvInformation/personalInfo/github}" 
+                               editable="{localModel>/editMode}"
+                               visible="{localModel>/editMode}"/>
+                        <Link text="GitHub Profile" 
+                              href="https://{localModel>/cvInformation/personalInfo/github}"
+                              visible="{= !${localModel>/editMode}}"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Summary -->
+                <VBox class="sapUiMediumMarginEnd">
+                    <Label text="Professional Summary" class="sapUiSmallMarginBottom"/>
+                    <TextArea value="{localModel>/cvInformation/enhancement/profileSummary}" 
+                              rows="6"
+                              editable="{localModel>/editMode}"
+                              visible="{localModel>/editMode}"/>
+                    <Text text="{localModel>/cvInformation/enhancement/profileSummary}" 
+                          maxLines="6" 
+                          class="sapUiSmallText"
+                          visible="{= !${localModel>/editMode}}"/>
+                </VBox>
+                
+                <!-- Quick Stats -->
+                <VBox>
+                    <Label text="Application Progress" class="sapUiSmallMarginBottom"/>
+                    <HBox class="sapUiTinyMarginBottom">
+                        <Text text="Profile Completeness: "/>
+                        <Text text="{localModel>/cvInformation/header/completenessScore}%" class="sapUiTinyMarginStart"/>
+                        <ObjectStatus text="{localModel>/cvInformation/header/completenessScore}%" 
+                                     state="{path: 'localModel>/cvInformation/header/completenessScore', formatter: '.formatCompletenessState'}" 
+                                     class="sapUiTinyMarginStart"/>
+                    </HBox>
+                    <HBox class="sapUiTinyMarginBottom">
+                        <Text text="Experience Years: "/>
+                        <Text text="{path: 'localModel>/cvInformation/experience', formatter: '.calculateTotalExperience'}" class="sapUiTinyMarginStart"/>
+                    </HBox>
+                    <HBox class="sapUiTinyMarginBottom">
+                        <Text text="Documents Uploaded: "/>
+                        <Text text="{path: 'localModel>/uploadedDocuments', formatter: '.getArrayLength'}" class="sapUiTinyMarginStart"/>
+                    </HBox>
+                    <HBox>
+                        <Text text="Application Status: "/>
+                        <ObjectStatus text="{localModel>/applicationStatus}" 
+                                     state="{path: 'localModel>/applicationStatus', formatter: '.formatApplicationState'}" 
+                                     class="sapUiTinyMarginStart"/>
+                    </HBox>
+                </VBox>
+            </layout:Grid>
+        </uxap:headerContent>
+
+        <!-- Sections -->
+        <uxap:sections>
+            
+            <!-- Personal Information Section -->
+            <uxap:ObjectPageSection title="Personal Information" id="personalInfoSection">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="">
+                        <uxap:blocks>
+                            <layout:Grid defaultSpan="L6 M6 S12" hSpacing="2">
+                                <VBox>
+                                    <Label text="First Name" required="true"/>
+                                    <Input value="{localModel>/cvInformation/personalInfo/firstName}" 
+                                           editable="{localModel>/editMode}"
+                                           visible="{localModel>/editMode}"/>
+                                    <Text text="{localModel>/cvInformation/personalInfo/firstName}" 
+                                          visible="{= !${localModel>/editMode}}"
+                                          class="sapUiSmallMarginTop"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Last Name" required="true"/>
+                                    <Input value="{localModel>/cvInformation/personalInfo/lastName}" 
+                                           editable="{localModel>/editMode}"
+                                           visible="{localModel>/editMode}"/>
+                                    <Text text="{localModel>/cvInformation/personalInfo/lastName}" 
+                                          visible="{= !${localModel>/editMode}}"
+                                          class="sapUiSmallMarginTop"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Email" required="true"/>
+                                    <Input value="{localModel>/cvInformation/personalInfo/email}" 
+                                           editable="{localModel>/editMode}"
+                                           visible="{localModel>/editMode}"/>
+                                    <Link text="{localModel>/cvInformation/personalInfo/email}" 
+                                          href="mailto:{localModel>/cvInformation/personalInfo/email}" 
+                                          visible="{= !${localModel>/editMode}}"
+                                          class="sapUiSmallMarginTop"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Phone" required="true"/>
+                                    <Input value="{localModel>/cvInformation/personalInfo/phone}" 
+                                           editable="{localModel>/editMode}"
+                                           visible="{localModel>/editMode}"/>
+                                    <Text text="{localModel>/cvInformation/personalInfo/phone}" 
+                                          visible="{= !${localModel>/editMode}}"
+                                          class="sapUiSmallMarginTop"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Location" required="true"/>
+                                    <Input value="{localModel>/cvInformation/personalInfo/location}" 
+                                           editable="{localModel>/editMode}"
+                                           visible="{localModel>/editMode}"/>
+                                    <Text text="{localModel>/cvInformation/personalInfo/location}" 
+                                          visible="{= !${localModel>/editMode}}"
+                                          class="sapUiSmallMarginTop"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Career Level"/>
+                                    <Select selectedKey="{localModel>/cvInformation/enhancement/careerLevel}" 
+                                            editable="{localModel>/editMode}"
+                                            visible="{localModel>/editMode}">
+                                        <core:Item key="entry" text="Entry Level"/>
+                                        <core:Item key="junior" text="Junior"/>
+                                        <core:Item key="mid" text="Mid Level"/>
+                                        <core:Item key="senior" text="Senior"/>
+                                        <core:Item key="lead" text="Lead"/>
+                                        <core:Item key="manager" text="Manager"/>
+                                        <core:Item key="director" text="Director"/>
+                                    </Select>
+                                    <Text text="{localModel>/cvInformation/enhancement/careerLevel}" 
+                                          visible="{= !${localModel>/editMode}}"
+                                          class="sapUiSmallMarginTop"/>
+                                </VBox>
+                            </layout:Grid>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Work Experience Section -->
+            <uxap:ObjectPageSection title="Work Experience" id="experienceSection">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="">
+                        <uxap:blocks>
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                                    <Title text="Work Experience" level="H3"/>
+                                    <Button text="Add Experience" 
+                                            icon="sap-icon://add" 
+                                            press="onAddExperience"
+                                            visible="{localModel>/editMode}"/>
+                                </HBox>
+                                
+                                <List items="{localModel>/cvInformation/experience}" mode="None">
+                                    <CustomListItem press="onExperiencePress">
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <VBox class="sapUiMediumMarginEnd">
+                                                <Title text="{localModel>title}" level="H4"/>
+                                                <Text text="{localModel>company} • {localModel>location}"/>
+                                                <Text text="{localModel>startDate} - {= ${localModel>current} ? 'Present' : ${localModel>endDate}}" 
+                                                      class="sapUiSmallMarginTop"/>
+                                                <Text text="{localModel>duration}" class="sapUiTinyMarginTop"/>
+                                            </VBox>
+                                            <VBox visible="{localModel>/editMode}">
+                                                <Button icon="sap-icon://edit" 
+                                                        press="onEditExperience" 
+                                                        tooltip="Edit Experience"/>
+                                                <Button icon="sap-icon://delete" 
+                                                        press="onDeleteExperience" 
+                                                        tooltip="Delete Experience"
+                                                        class="sapUiTinyMarginTop"/>
+                                            </VBox>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Education Section -->
+            <uxap:ObjectPageSection title="Education" id="educationSection">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="">
+                        <uxap:blocks>
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                                    <Title text="Education" level="H3"/>
+                                    <Button text="Add Education" 
+                                            icon="sap-icon://add" 
+                                            press="onAddEducation"
+                                            visible="{localModel>/editMode}"/>
+                                </HBox>
+                                
+                                <List items="{localModel>/cvInformation/education}" mode="None">
+                                    <CustomListItem press="onEducationPress">
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <VBox class="sapUiMediumMarginEnd">
+                                                <Title text="{localModel>degree}" level="H4"/>
+                                                <Text text="{localModel>major}" class="sapUiTinyMarginTop"/>
+                                                <Text text="{localModel>institution}"/>
+                                                <Text text="{localModel>startDate} - {localModel>endDate}" 
+                                                      class="sapUiSmallMarginTop"/>
+                                                <Text text="GPA: {localModel>gpa}" 
+                                                      class="sapUiTinyMarginTop"
+                                                      visible="{= ${localModel>gpa} !== ''}"/>
+                                            </VBox>
+                                            <VBox visible="{localModel>/editMode}">
+                                                <Button icon="sap-icon://edit" 
+                                                        press="onEditEducation" 
+                                                        tooltip="Edit Education"/>
+                                                <Button icon="sap-icon://delete" 
+                                                        press="onDeleteEducation" 
+                                                        tooltip="Delete Education"
+                                                        class="sapUiTinyMarginTop"/>
+                                            </VBox>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Skills Section -->
+            <uxap:ObjectPageSection title="Skills" id="skillsSection">
+                <uxap:subSections>
+                    <!-- Programming Skills -->
+                    <uxap:ObjectPageSubSection title="Programming Languages">
+                        <uxap:blocks>
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                                    <Title text="Programming Languages" level="H4"/>
+                                    <Button text="Add Skill" 
+                                            icon="sap-icon://add" 
+                                            press="onAddSkill"
+                                            visible="{localModel>/editMode}"/>
+                                </HBox>
+                                <List items="{localModel>/cvInformation/skills/programming}" mode="None">
+                                    <CustomListItem>
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <VBox>
+                                                <Text text="{localModel>name}"/>
+                                                <RatingIndicator value="{localModel>level}" maxValue="5" editable="{localModel>/editMode}"/>
+                                            </VBox>
+                                            <Button icon="sap-icon://delete" 
+                                                    press="onDeleteSkill" 
+                                                    visible="{localModel>/editMode}"/>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                    
+                    <!-- Technical Skills -->
+                    <uxap:ObjectPageSubSection title="Technical Skills">
+                        <uxap:blocks>
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                                    <Title text="Technical Skills" level="H4"/>
+                                    <Button text="Add Skill" 
+                                            icon="sap-icon://add" 
+                                            press="onAddTechnicalSkill"
+                                            visible="{localModel>/editMode}"/>
+                                </HBox>
+                                <List items="{localModel>/cvInformation/skills/technical}" mode="None">
+                                    <CustomListItem>
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <VBox>
+                                                <Text text="{localModel>name}"/>
+                                                <RatingIndicator value="{localModel>level}" maxValue="5" editable="{localModel>/editMode}"/>
+                                            </VBox>
+                                            <Button icon="sap-icon://delete" 
+                                                    press="onDeleteTechnicalSkill" 
+                                                    visible="{localModel>/editMode}"/>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Projects Section -->
+            <uxap:ObjectPageSection title="Projects" id="projectsSection">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="">
+                        <uxap:blocks>
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                                    <Title text="Projects" level="H3"/>
+                                    <Button text="Add Project" 
+                                            icon="sap-icon://add" 
+                                            press="onAddProject"
+                                            visible="{localModel>/editMode}"/>
+                                </HBox>
+                                
+                                <List items="{localModel>/cvInformation/projects}" mode="None">
+                                    <CustomListItem press="onProjectPress">
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <VBox class="sapUiMediumMarginEnd">
+                                                <Title text="{localModel>name}" level="H4"/>
+                                                <Text text="{localModel>description}" maxLines="3"/>
+                                                <Text text="Status: {localModel>status}" class="sapUiSmallMarginTop"/>
+                                                <Text text="{localModel>startDate} - {localModel>endDate}" 
+                                                      class="sapUiTinyMarginTop"/>
+                                            </VBox>
+                                            <VBox visible="{localModel>/editMode}">
+                                                <Button icon="sap-icon://edit" 
+                                                        press="onEditProject" 
+                                                        tooltip="Edit Project"/>
+                                                <Button icon="sap-icon://delete" 
+                                                        press="onDeleteProject" 
+                                                        tooltip="Delete Project"
+                                                        class="sapUiTinyMarginTop"/>
+                                            </VBox>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Document Upload Section -->
+            <uxap:ObjectPageSection title="Supporting Documents" id="documentsSection">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="">
+                        <uxap:blocks>
+                            <VBox>
+                                <Title text="Upload Supporting Documents" level="H3" class="sapUiMediumMarginBottom"/>
+                                
+                                <layout:Grid defaultSpan="L6 M6 S12" hSpacing="2">
+                                    <!-- Education Documents -->
+                                    <VBox class="sapUiMediumMarginBottom">
+                                        <Label text="Education Documents" class="sapUiSmallMarginBottom"/>
+                                        <u:FileUploader id="educationDocsUploader" 
+                                                       width="100%" 
+                                                       placeholder="Upload degree certificates, transcripts"
+                                                       fileType="pdf,jpg,jpeg,png"
+                                                       maximumFileSize="10"
+                                                       multiple="true"
+                                                       change="onEducationDocumentChange"
+                                                       class="sapUiTinyMarginBottom"/>
+                                        <List items="{localModel>/uploadedDocuments/education}" mode="Delete" delete="onDeleteDocument">
+                                            <StandardListItem title="{localModel>fileName}" 
+                                                            description="Uploaded on {localModel>uploadDate}"
+                                                            icon="sap-icon://document"/>
+                                        </List>
+                                    </VBox>
+                                    
+                                    <!-- Identity Documents -->
+                                    <VBox class="sapUiMediumMarginBottom">
+                                        <Label text="Identity Documents" class="sapUiSmallMarginBottom"/>
+                                        <u:FileUploader id="identityDocsUploader" 
+                                                       width="100%" 
+                                                       placeholder="Upload ID, passport, driving license"
+                                                       fileType="pdf,jpg,jpeg,png"
+                                                       maximumFileSize="10"
+                                                       multiple="true"
+                                                       change="onIdentityDocumentChange"
+                                                       class="sapUiTinyMarginBottom"/>
+                                        <List items="{localModel>/uploadedDocuments/identity}" mode="Delete" delete="onDeleteDocument">
+                                            <StandardListItem title="{localModel>fileName}" 
+                                                            description="Uploaded on {localModel>uploadDate}"
+                                                            icon="sap-icon://card"/>
+                                        </List>
+                                    </VBox>
+                                    
+                                    <!-- Experience Documents -->
+                                    <VBox class="sapUiMediumMarginBottom">
+                                        <Label text="Experience Documents" class="sapUiSmallMarginBottom"/>
+                                        <u:FileUploader id="experienceDocsUploader" 
+                                                       width="100%" 
+                                                       placeholder="Upload offer letters, experience letters"
+                                                       fileType="pdf,jpg,jpeg,png"
+                                                       maximumFileSize="10"
+                                                       multiple="true"
+                                                       change="onExperienceDocumentChange"
+                                                       class="sapUiTinyMarginBottom"/>
+                                        <List items="{localModel>/uploadedDocuments/experience}" mode="Delete" delete="onDeleteDocument">
+                                            <StandardListItem title="{localModel>fileName}" 
+                                                            description="Uploaded on {localModel>uploadDate}"
+                                                            icon="sap-icon://business-objects-experience"/>
+                                        </List>
+                                    </VBox>
+                                    
+                                    <!-- Other Documents -->
+                                    <VBox class="sapUiMediumMarginBottom">
+                                        <Label text="Other Documents" class="sapUiSmallMarginBottom"/>
+                                        <u:FileUploader id="otherDocsUploader" 
+                                                       width="100%" 
+                                                       placeholder="Upload certificates, portfolios"
+                                                       fileType="pdf,jpg,jpeg,png"
+                                                       maximumFileSize="10"
+                                                       multiple="true"
+                                                       change="onOtherDocumentChange"
+                                                       class="sapUiTinyMarginBottom"/>
+                                        <List items="{localModel>/uploadedDocuments/other}" mode="Delete" delete="onDeleteDocument">
+                                            <StandardListItem title="{localModel>fileName}" 
+                                                            description="Uploaded on {localModel>uploadDate}"
+                                                            icon="sap-icon://attachment"/>
+                                        </List>
+                                    </VBox>
+                                </layout:Grid>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Application Summary Section -->
+            <uxap:ObjectPageSection title="Application Summary" id="summarySection">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="">
+                        <uxap:blocks>
+                            <VBox>
+                                <Title text="Application Checklist" level="H3" class="sapUiMediumMarginBottom"/>
+                                
+                                <List items="{localModel>/applicationChecklist}" mode="None">
+                                    <CustomListItem>
+                                        <HBox alignItems="Center">
+                                            <core:Icon src="{= ${localModel>completed} ? 'sap-icon://accept' : 'sap-icon://decline'}" 
+                                                      color="{= ${localModel>completed} ? 'green' : 'red'}" 
+                                                      class="sapUiMediumMarginEnd"/>
+                                            <VBox>
+                                                <Text text="{localModel>item}"/>
+                                                <Text text="{localModel>description}" class="sapUiSmallText"/>
+                                            </VBox>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                                
+                                <HBox justifyContent="Center" class="sapUiLargeMarginTop">
+                                    <Button text="Submit Final Application" 
+                                            type="Emphasized" 
+                                            icon="sap-icon://complete"
+                                            press="onSubmitFinalApplication"
+                                            enabled="{= ${localModel>/cvInformation/header/completenessScore} >= 80}"
+                                            visible="{= !${localModel>/editMode}}"/>
+                                </HBox>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+        </uxap:sections>
+    </uxap:ObjectPageLayout>
+</mvc:View>

@@ -1,0 +1,74 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog title="Add/Edit Work Experience" 
+            contentWidth="600px" 
+            contentHeight="500px"
+            draggable="true"
+            resizable="true">
+        
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <f:SimpleForm layout="ResponsiveGridLayout" 
+                             editable="true"
+                             columnsL="2" 
+                             columnsM="2">
+                    
+                    <Label text="Job Title" required="true"/>
+                    <Input value="{dialogModel>/title}" 
+                           placeholder="e.g. Software Engineer"
+                           required="true"/>
+                    
+                    <Label text="Company" required="true"/>
+                    <Input value="{dialogModel>/company}" 
+                           placeholder="e.g. Microsoft"
+                           required="true"/>
+                    
+                    <Label text="Location"/>
+                    <Input value="{dialogModel>/location}" 
+                           placeholder="e.g. Seattle, WA"/>
+                    
+                    <Label text="Start Date (MM-YYYY)" required="true"/>
+                    <Input value="{dialogModel>/startDate}" 
+                           placeholder="e.g. 01-2023"
+                           required="true"/>
+                    
+                    <Label text="End Date (MM-YYYY)"/>
+                    <Input value="{dialogModel>/endDate}" 
+                           placeholder="e.g. 12-2024"
+                           enabled="{= !${dialogModel>/current}}"/>
+                    
+                    <Label text=""/>
+                    <CheckBox text="Currently working here" 
+                             selected="{dialogModel>/current}"/>
+                    
+                    <Label text="Job Description"/>
+                    <TextArea value="{dialogModel>/description}" 
+                             rows="4"
+                             placeholder="Describe your role and responsibilities..."
+                             width="100%"/>
+                    
+                    <Label text="Key Achievements"/>
+                    <TextArea value="{dialogModel>/achievements}" 
+                             rows="3"
+                             placeholder="List your key achievements (separate with new lines)"
+                             width="100%"/>
+                    
+                    <Label text="Technologies Used"/>
+                    <Input value="{dialogModel>/technologies}" 
+                           placeholder="e.g. Java, React, AWS (comma-separated)"/>
+                </f:SimpleForm>
+            </VBox>
+        </content>
+        
+        <buttons>
+            <Button text="Save" 
+                    type="Emphasized" 
+                    press="onSaveExperience"/>
+            <Button text="Cancel" 
+                    press="onCancelExperience"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

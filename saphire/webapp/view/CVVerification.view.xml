@@ -1,0 +1,144 @@
+<mvc:View
+    controllerName="saphire.controller.CVVerification"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified"
+    xmlns="sap.m"
+    displayBlock="true">
+    
+    <Page id="cvVerificationPage" title="Resume Upload" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <VBox class="sapUiMediumMargin">
+                
+              
+
+                <Panel class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox alignItems="Center" class="sapUiLargeMargin">
+                            
+                            <VBox id="uploadArea" 
+                                  alignItems="Center" 
+                                  justifyContent="Center"
+                                  class="uploadDropZone sapUiLargeMarginBottom"
+                                  width="100%"
+                                  height="300px">
+                                
+                                <VBox alignItems="Center" id="uploadIconContainer">
+                                    <core:Icon id="uploadIcon" 
+                                              src="sap-icon://upload" 
+                                              size="4rem" 
+                                              color="#666"
+                                              class="sapUiMediumMarginBottom"/>
+                                    <Text id="uploadText" 
+                                          text="Drag and drop your resume here or click to browse" 
+                                          textAlign="Center"
+                                          class="sapUiMediumMarginBottom"/>
+                                    <Text text="Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)" 
+                                          class="sapUiSmallMarginBottom"/>
+                                </VBox>
+
+                                <!-- Success State -->
+                                <VBox id="successContainer" alignItems="Center" visible="false">
+                                    <core:Icon src="sap-icon://accept" 
+                                              size="4rem" 
+                                              color="#107e3e"
+                                              class="sapUiMediumMarginBottom"/>
+                                    <Text id="successText" 
+                                          text="Resume uploaded successfully!" 
+                                          textAlign="Center"
+                                          class="sapUiMediumMarginBottom"/>
+                                    <Text id="fileNameText" class="sapUiSmallMarginBottom"/>
+                                </VBox>
+
+                                <!-- Progress Bar -->
+                                <ProgressIndicator id="uploadProgress" 
+                                                  visible="false" 
+                                                  width="300px"
+                                                  class="sapUiMediumMarginTop"/>
+                            </VBox>
+
+                            <!-- File Uploader -->
+                            <u:FileUploader id="fileUploader"
+                                           visible="false"
+                                           name="resumeFile"
+                                           uploadUrl=""
+                                           fileType="pdf,doc,docx,txt"
+                                           maximumFileSize="10"
+                                           multiple="false"
+                                           change="onFileChange"
+                                           typeMissmatch="onTypeMismatch"
+                                           fileSizeExceed="onFileSizeExceed"
+                                           sendXHR="true"
+                                           useMultipart="false"/>
+                            
+                            <!-- Alternative HTML File Input -->
+                            <core:HTML id="htmlFileInput" 
+                                      visible="false"
+                                      content="&lt;input type='file' id='nativeFileInput' accept='.pdf,.doc,.docx,.txt' style='display:none' /&gt;"
+                                      afterRendering="onHtmlFileInputRendered"/>
+
+                            <!-- Upload Button -->
+                            <Button id="uploadButton" 
+                                   text="Upload Resume" 
+                                   type="Emphasized"
+                                   icon="sap-icon://upload"
+                                   press="onUploadPress"
+                                   width="200px"
+                                   class="sapUiMediumMarginTop"/>
+
+                            <!-- Additional Actions -->
+                            <HBox class="sapUiMediumMarginTop">
+                                <Button id="removeButton" 
+                                       text="Remove" 
+                                       type="Transparent"
+                                       icon="sap-icon://delete"
+                                       press="onRemoveFile"
+                                       visible="false"
+                                       class="sapUiSmallMarginEnd"/>
+                                <Button id="previewButton" 
+                                       text="Preview" 
+                                       type="Transparent"
+                                       icon="sap-icon://preview"
+                                       press="onPreviewFile"
+                                       visible="false"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <Panel class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox class="sapUiMediumMargin">
+                            <CheckBox id="consentCheckbox" 
+                                     text="I consent to the storage and processing of my personal data for recruitment purposes"
+                                     select="onConsentChange"
+                                     class="sapUiMediumMarginBottom"/>
+                            <FormattedText htmlText="By uploading your resume, you agree to our &lt;a href='#' class='sapMLnk'&gt;Privacy Policy&lt;/a&gt; and &lt;a href='#' class='sapMLnk'&gt;Terms of Service&lt;/a&gt;."/>
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <!-- Action Buttons -->
+                <HBox justifyContent="Center" class="sapUiMediumMarginTop">
+                    <Button id="submitButton" 
+                           text="Submit Application" 
+                           type="Emphasized"
+                           press="onSubmitApplication"
+                           enabled="false"
+                           class="sapUiMediumMarginEnd"/>
+                    <Button text="Save Draft" 
+                           type="Default"
+                           press="onSaveDraft"
+                           class="sapUiMediumMarginEnd"/>
+                    <Button text="Cancel" 
+                           type="Transparent"
+                           press="onCancel"/>
+                </HBox>
+
+          
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

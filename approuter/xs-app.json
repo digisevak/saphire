@@ -1,0 +1,24 @@
+{
+  "welcomeFile": "index.html",
+  "authenticationMethod": "none",
+  "routes": [
+    {
+      "source": "^/odata/(.*)$",
+      "target": "/odata/$1",
+      "authenticationType": "none",
+      "destination": "backend"
+    },
+    {
+      "source": "^/api/(.*)$",
+      "target": "/api/$1",
+      "authenticationType": "none",
+      "destination": "backend"
+    },
+    {
+      "source": "/(.*)",
+      "target": "$1",
+      "authenticationType": "none",
+      "destination": "uiapp"
+    }
+  ]
+}

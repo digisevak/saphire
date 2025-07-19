@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog title="Add Skill" 
+            contentWidth="400px" 
+            contentHeight="300px"
+            draggable="true">
+        
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <f:SimpleForm layout="ResponsiveGridLayout" 
+                             editable="true"
+                             columnsL="1" 
+                             columnsM="1">
+                    
+                    <Label text="Skill Name" required="true"/>
+                    <Input value="{dialogModel>/name}" 
+                           placeholder="e.g. JavaScript, React, AWS"
+                           required="true"/>
+                    
+                    <Label text="Proficiency Level"/>
+                    <VBox>
+                        <RatingIndicator value="{dialogModel>/level}" 
+                                        maxValue="5" 
+                                        editable="true"
+                                        class="sapUiSmallMarginBottom"/>
+                        <Text text="1 = Beginner, 2 = Basic, 3 = Intermediate, 4 = Advanced, 5 = Expert" 
+                              class="sapUiSmallText"/>
+                    </VBox>
+                    
+                    <Label text="Years of Experience"/>
+                    <Input value="{dialogModel>/experience}" 
+                           type="Number"
+                           placeholder="e.g. 2"/>
+                    
+                    <Label text="Category"/>
+                    <Text text="{= ${dialogModel>/category} === 'programming' ? 'Programming Languages' : 'Technical Skills'}" 
+                          class="sapUiSmallMarginTop"/>
+                </f:SimpleForm>
+            </VBox>
+        </content>
+        
+        <buttons>
+            <Button text="Add Skill" 
+                    type="Emphasized" 
+                    press="onSaveSkill"/>
+            <Button text="Cancel" 
+                    press="onCancelSkill"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

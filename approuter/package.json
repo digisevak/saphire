@@ -1,0 +1,12 @@
+{
+    "name": "sla-moniter-router",
+    "dependencies": {
+      "@sap/approuter": "^16.0.0"
+    },
+    "engines": {
+      "node": "^20.0.0"
+    },
+    "scripts": {
+      "start": "node ./approuter-start.js"
+    }
+  }

@@ -1,0 +1,23 @@
+<mvc:View controllerName="saphire.controller.Chats" displayBlock="true"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core" core:require="{
+		ChatFormatter: 'saphire/formatter/ChatFormatter'
+	}"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<Page showHeader="false" showNavButton="false">
+		<content>
+			<List id="chatList" noDataText="No chats available. Create one by clicking on the add button." growing="true" growingScrollToLoad="true" growingThreshold="20" items="{ path: '/Chats', sorter: { path: 'createdAt', descending: true } }" itemPress="onChatPress">
+				<headerToolbar>
+					<Toolbar>
+						<Title text="SAPHire AI"></Title>
+						<ToolbarSpacer></ToolbarSpacer>
+						<Button type="Emphasized" icon="sap-icon://add" press="onAddChat" />
+					</Toolbar>
+				</headerToolbar>
+				<StandardListItem visible="{ path: 'ID', formatter: 'ChatFormatter.itemIsVisibleInList', targetType: 'any' }" type="Navigation" title="{topic}" description="{model} | {= ${personality/name} || 'none' }"></StandardListItem>
+			</List>
+		</content>
+	</Page>
+
+</mvc:View>

@@ -1,0 +1,10 @@
+<mvc:View controllerName="saphire.controller.NoChat" displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:custom="saphire.control"
+    xmlns:layout="sap.ui.layout">
+
+    <MessagePage showHeader="false" text="SAPHire AI Assistant" description="Create or select a chat and let's start chatting." icon="sap-icon://tnt/robot"/>
+
+</mvc:View>
